@@ -2,6 +2,9 @@
 //incluimos los archivos php que estaremos utilizando
 include 'layout\layout.php';
 include 'helpers\utilities.php';
+include 'helpers/FileHandler/IFileHandler.php';
+include 'helpers/FileHandler/SerializationFileHandler.php';
+include 'helpers/FileHandler/JsonFileHandler.php';
 require_once 'Personajes\personaje.php';
 require_once 'services\IServiceBase.php';
 require_once 'Personajes\CharacterService.php';
@@ -9,7 +12,7 @@ require_once 'Races\RaceService.php';
 
 $layout = new Layout(false);
 $utilities = new Utilities();
-$service = new CharacterService();
+$service = new CharacterService("Personajes/data","personajes");
 $raceService = new RaceService();
 
 

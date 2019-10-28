@@ -2,26 +2,36 @@
 
 class CharacterService implements IServiceBase
 {
+    public $utilities;
+    public $fileHandler;
+    public $directory;
+    public $filename;
+
+
+    function __construct($directory, $filename)
+    {
+        $this->directory = $directory;
+        $this->filename = $filename;
+        $this->utilities = new Utilities();
+        $this->fileHandler = new JsonFileHandler();
+    }
 
     public function GetById($id)
     {
-        $utilities = new Utilities();
         $listadoDragonBall = $this->GetList();
-        $elementDecode = $utilities->searchProperty($listadoDragonBall, 'id', $id)[0];
-        $element = New Character();
+        $elementDecode = $this->utilities->searchProperty($listadoDragonBall, 'id', $id)[0];
+        $element = new Character();
         $element->set($elementDecode);
         return $element;
     }
 
     public function GetList()
     {
-        $utilities = new Utilities();
-        $listadoDragonBall = array();
+        $listadoDragonBall = $this->fileHandler->ReadFile($this->directory, $this->filename);
 
-        if (isset($_COOKIE['dragonball'])) {
-            $listadoDragonBall = json_decode($_COOKIE['dragonball'],false); 
-        } else {
-            setcookie("dragonball", json_encode($listadoDragonBall), $utilities->GetCookieTime(), "/");
+        if ($listadoDragonBall == false) {
+            $this->fileHandler->SaveFile($this->directory, $this->filename, array());
+            return array();
         }
 
         return $listadoDragonBall;
@@ -29,13 +39,12 @@ class CharacterService implements IServiceBase
 
     public function Add($entity)
     {
-        $utilities = new Utilities();
         $listadoDragonBall = $this->GetList();
 
         $characterId = 1; //El Id del personaje que vamos a crear
 
         if (!empty($listadoDragonBall)) { //validamos si ya hay personajes creado
-            $lastCharacter = $utilities->getLastElement($listadoDragonBall); //Obtenemos el ultimo elemento del listado de heroe  
+            $lastCharacter = $this->utilities->getLastElement($listadoDragonBall); //Obtenemos el ultimo elemento del listado de heroe  
             $characterId =  $lastCharacter->id + 1; //como ya existen heroes el id del nuevo heroe debe ser el id el ultimo + 1
         }
 
@@ -49,7 +58,7 @@ class CharacterService implements IServiceBase
             $size =  $_FILES["profilePhoto"]["size"];
             $name = 'img/' . $characterId . '.' . $typeReplace;
 
-            $sucess = $utilities->uploadImage("../Personajes/img", $name, $_FILES['profilePhoto']['tmp_name'], $type, $size);
+            $sucess = $this->utilities->uploadImage("../Personajes/img", $name, $_FILES['profilePhoto']['tmp_name'], $type, $size);
 
             if ($sucess) {
                 $entity->profilePhoto = $name;
@@ -58,16 +67,16 @@ class CharacterService implements IServiceBase
 
         array_push($listadoDragonBall, $entity); //Agregamos el personaje al listado de personajes
 
-        setcookie("dragonball", json_encode($listadoDragonBall), $utilities->GetCookieTime(), "/");
+
+        $this->fileHandler->SaveFile($this->directory, $this->filename, $listadoDragonBall);
     }
 
     public function Update($id, $entity)
-    {
-        $utilities = new Utilities();
+    {        
         $element = $this->GetById($id);
         $listadoDragonBall = $this->GetList();
 
-        $elementIndex = $utilities->getIndexElement($listadoDragonBall, 'id', $id); //Obtenemos el indice del elemento en el array del listado de heroes que vamos a editar   
+        $elementIndex = $this->utilities->getIndexElement($listadoDragonBall, 'id', $id); //Obtenemos el indice del elemento en el array del listado de heroes que vamos a editar   
 
         if ($_FILES['profilePhoto']) {
 
@@ -79,7 +88,7 @@ class CharacterService implements IServiceBase
                 $size =  $_FILES["profilePhoto"]["size"];
                 $name = 'img/' . $id . '.' . $typeReplace;
 
-                $sucess = $utilities->uploadImage("../Personajes/img", $name, $_FILES['profilePhoto']['tmp_name'], $type, $size);
+                $sucess = $this->utilities->uploadImage("../Personajes/img", $name, $_FILES['profilePhoto']['tmp_name'], $type, $size);
 
                 if ($sucess) {
                     $entity->profilePhoto = $name;
@@ -89,21 +98,20 @@ class CharacterService implements IServiceBase
 
         $listadoDragonBall[$elementIndex] =  $entity; //Actualizamos los datos del heroe en el listado de heroes utilizando el index obtenido del elemento
 
-        setcookie("dragonball", json_encode($listadoDragonBall), $utilities->GetCookieTime(), "/");
+        $this->fileHandler->SaveFile($this->directory, $this->filename, $listadoDragonBall);
     }
 
     public function Delete($id)
     {
-        $utilities = new Utilities();
         $listadoDragonBall = $this->GetList();
         //Obtenemos el listado actual de heroes almacenado en la session
 
-        $elementIndex = $utilities->getIndexElement($listadoDragonBall, 'id', $id); //Obtenemos el indice del elemento en el array del listado de heroes que vamos a editar       
- 
-    
+        $elementIndex = $this->utilities->getIndexElement($listadoDragonBall, 'id', $id); //Obtenemos el indice del elemento en el array del listado de heroes que vamos a editar       
+
+
         unset($listadoDragonBall[$elementIndex]);
 
         $listadoDragonBall = array_values($listadoDragonBall);
-        setcookie("dragonball", json_encode($listadoDragonBall), $utilities->GetCookieTime(), "/");
+        $this->fileHandler->SaveFile($this->directory, $this->filename, $listadoDragonBall);
     }
 }

@@ -3,12 +3,15 @@
 require_once '../layout/layout.php';
 require_once '../helpers/utilities.php';
 require_once 'personaje.php';
+require_once '../helpers/FileHandler/IFileHandler.php';
+require_once '../helpers/FileHandler/SerializationFileHandler.php';
+require_once '../helpers/FileHandler/JsonFileHandler.php';
 require_once '../services\IServiceBase.php';
 require_once 'CharacterService.php';
 
 $layout = new Layout(true);
 $utilities = new Utilities();
-$service = new CharacterService();
+$service = new CharacterService("data","personajes");
 
 
 $containId = isset($_GET['id']); //validamos si hay un parametro id en el query string de la url
