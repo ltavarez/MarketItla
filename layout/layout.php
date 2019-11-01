@@ -14,6 +14,13 @@ function __construct($page)
 function printFooter(){
 
  $footer = <<< EOF
+
+ <footer class="pt-4 my-md-5 pt-md-5 border-top">
+ <div class="row">
+  
+ </div>
+</footer>
+
 <script type="text/javascript" src="{$this->directory}assets\js\plugin\jquery\jquery.js"></script>
 <script type="text/javascript" src="{$this->directory}assets\js\bootstrap.bundle.js"></script>
 <script type="text/javascript" src="{$this->directory}assets\js\bootstrap.js"></script>
@@ -42,29 +49,19 @@ function printHeader(){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Dragon ball</title>
+        <title>Market</title>
     </head>
     
     <body class="d-flex flex-column h-100">
     
     <header>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="{$this->directory}index.php">Dragon ball wiki</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{$this->directory}Personajes/add.php">Personajes <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{$this->directory}Races/list.php">Razas</a>
-          </li>     
-        </ul>   
-      </div>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal"><a class="navbar-brand mr-auto mr-lg-0" href="{$this->directory}index.php">Market Itla</a></h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+      
     </nav>
+    <a class="btn btn-outline-primary" href="{$this->directory}user/login.php"><i class="fa fa-user-circle" aria-hidden="true"></i> Iniciar sección </a>
+  </div>
     </header>
 EOF;
 
