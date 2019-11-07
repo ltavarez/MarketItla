@@ -6,12 +6,28 @@ include 'helpers/FileHandler/IFileHandler.php';
 include 'helpers/FileHandler/SerializationFileHandler.php';
 include 'helpers/FileHandler/JsonFileHandler.php';
 include 'database/MarketItlaContext.php';
+include 'user/User.php';
+include 'database/repository/IRepository.php';
+include 'database/repository/RepositoryBase.php';
+include 'database/repository/RepositoryUser.php';
+include 'user/UserService.php';
 
 session_start();
 
 $layout = new Layout(false);
 $utilities = new Utilities();
-$context = new MarketItlaContext("database");
+$service = new UserService("database");
+
+$user = new User();
+$user->Id = 10;
+$user->UserName = "Leo 3";
+$user->Password = "12345";
+$user->FirstName = "Leonardo 2";
+$user->LastName = "Tavarez 2";
+$user->Email="leonardotv.93@gmail.com 2";
+$user->Status=false;
+
+$service->Update($user);
 
 $viewDetails = true;
 $viewList = false;

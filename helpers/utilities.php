@@ -35,28 +35,27 @@ class Utilities
    Retorna: El index del primer elemento que cumpla con la condicion de busqueda */
     public function getIndexElement($list, $property, $value)
     {
-        $index = 0;      
+        $index = 0;
         foreach ($list as $key => $item) {
             if ($item != null) {
                 if ($item->$property == $value) {
                     $index = $key;
                     break;
                 }
-            }            
+            }
         }
         return $index;
     }
 
     public function GetCookieTime()
     {
-        return time() + 60*60*24*30;
+        return time() + 60 * 60 * 24 * 30;
     }
 
-    public function makeSafe($value){
-        $context = new MarketItlaContext("../database");   
-        return $context->db->real_escape_string($value);
- 
-     }
+    public function makeSafe($value, $db)
+    {
+        return $db->real_escape_string($value);
+    }
 
     public function uploadImage($directory, $name, $tmpFile, $type, $size)
     {

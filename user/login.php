@@ -6,6 +6,10 @@ include '../helpers/FileHandler/IFileHandler.php';
 include '../helpers/FileHandler/SerializationFileHandler.php';
 include '../helpers/FileHandler/JsonFileHandler.php';
 include '../database/MarketItlaContext.php';
+include 'User.php';
+include '../database/repository/IRepository.php';
+include '../database/repository/RepositoryBase.php';
+include '../database/repository/RepositoryUser.php';
 include 'UserService.php';
 
 
