@@ -39,6 +39,23 @@ class JsonFileHandler implements IFileHandler{
         }      
 
     }
+
+    function ReadConfiguration($directory,$filename){
+        
+        $path = $directory . "/". $filename . ".json";
+
+        if(file_exists($path)){
+            $file = fopen($path,"r");
+
+            $contents = fread($file,filesize($path));
+            fclose($file);
+            return json_decode($contents);
+          
+        }else{
+            return false;
+        }      
+
+    }
 }
 
 ?>

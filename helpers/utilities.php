@@ -52,6 +52,12 @@ class Utilities
         return time() + 60*60*24*30;
     }
 
+    public function makeSafe($value){
+        $context = new MarketItlaContext("../database");   
+        return $context->db->real_escape_string($value);
+ 
+     }
+
     public function uploadImage($directory, $name, $tmpFile, $type, $size)
     {
         $isSuccess = false;
