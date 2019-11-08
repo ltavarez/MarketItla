@@ -16,18 +16,8 @@ session_start();
 
 $layout = new Layout(false);
 $utilities = new Utilities();
-$service = new UserService("database");
 
-$user = new User();
-$user->Id = 10;
-$user->UserName = "Leo 3";
-$user->Password = "12345";
-$user->FirstName = "Leonardo 2";
-$user->LastName = "Tavarez 2";
-$user->Email="leonardotv.93@gmail.com 2";
-$user->Status=false;
 
-$service->Update($user);
 
 $viewDetails = true;
 $viewList = false;
@@ -235,7 +225,7 @@ if (isset($_GET["name"])) {
                             </tr>
                         </tbody>
                     </table>
-               
+
                 <?php endif; ?>
 
 

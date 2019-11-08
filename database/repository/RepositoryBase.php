@@ -12,6 +12,7 @@ class RepositoryBase implements IRepository
 
     public function GetAll($entity)
     {
+        $entity =  $this->MakeSafeEntity($entity);
         $list = [];
         $table = get_class($entity);
         $stmt = $this->db->prepare("SELECT * FROM $table");
@@ -34,8 +35,75 @@ class RepositoryBase implements IRepository
         return $list;
     }
 
+    public function GetAllActive($entity, $field)
+    {
+        $entity =  $this->MakeSafeEntity($entity);
+        $list = [];
+        $table = get_class($entity);
+        $status = 1;
+
+        $sq = "SELECT * FROM $table where Status = $status";
+
+        if ($field != null) {
+            $sq = "SELECT * FROM $table where $field = $status";
+        }
+
+        $stmt = $this->db->prepare($sq);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return null;
+        } else {
+            while ($row = $result->fetch_object()) {
+
+                $register = new $table();
+                foreach ($entity as $key => $value) {
+                    $register->{$key} = $row->{$key};
+                }
+                array_push($list, $register);
+            }
+        }
+        $stmt->close();
+        return $list;
+    }
+
+    public function GetAllInactive($entity, $field)
+    {
+        $entity =  $this->MakeSafeEntity($entity);
+        $list = [];
+        $table = get_class($entity);
+        $status = 0;
+
+        $sq = "SELECT * FROM $table where Status = $status";
+
+        if ($field != null) {
+            $sq = "SELECT * FROM $table where $field = $status";
+        }
+
+        $stmt = $this->db->prepare($sq);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return null;
+        } else {
+            while ($row = $result->fetch_object()) {
+
+                $register = new $table();
+                foreach ($entity as $key => $value) {
+                    $register->{$key} = $row->{$key};
+                }
+                array_push($list, $register);
+            }
+        }
+        $stmt->close();
+        return $list;
+    }
+
     public function GetById($id, $field, $entity)
     {
+        $entity =  $this->MakeSafeEntity($entity);
         $table = get_class($entity);
         $register = new $table;
 
@@ -67,6 +135,7 @@ class RepositoryBase implements IRepository
 
     public function Add($entity)
     {
+        $entity =  $this->MakeSafeEntity($entity);
         $table = get_class($entity);
         $fieldInsert = array();
         $valueInsert = array();
@@ -95,6 +164,7 @@ class RepositoryBase implements IRepository
 
     public function Update($entity, $field = null)
     {
+        $entity =  $this->MakeSafeEntity($entity);
         $table = get_class($entity);
         $setUpdate = array();
         $params = array("");
@@ -129,11 +199,54 @@ class RepositoryBase implements IRepository
         $stmt->close();
     }
 
-    public function Delete($id, $field = null)
-    { }
+    public function Delete($id,$entity, $field = null)
+    { 
+        $entity =  $this->MakeSafeEntity($entity);
+        $table = get_class($entity);
 
-    public function ChangeStatus($id, $fieldStatus, $value, $field = null)
-    { }
+        if ($field == null) {
+            $field = "Id";
+        }      
+
+        $typeParam = $this->BindParam($id);      
+
+        $stmt = $this->db->prepare("DELETE FROM $table  WHERE $field = ?");
+        $stmt->bind_param("$typeParam", $id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function ChangeStatus($id, $value, $fieldStatus = null,$field = null, $entity = null)
+    {
+        $entity =  $this->MakeSafeEntity($entity);
+        $table = get_class($entity);
+
+        if ($field == null) {
+            $field = "Id";
+        }
+
+        if ($fieldStatus == null) {
+            $fieldStatus = "Status";
+        }
+
+        $typeParamValue = $this->BindParam($value);
+        $typeParamId = $this->BindParam($id);
+
+        $stmt = $this->db->prepare("UPDATE $table SET $fieldStatus = ? WHERE $field = ?");
+        $stmt->bind_param("$typeParamValue" . "$typeParamId", $value, $id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+
+    public function MakeSafeEntity($entity)
+    {
+        foreach ($entity as $key => $value) {
+            $entity->{$key} = $this->utility->makeSafe($value, $this->db);
+        }
+
+        return $entity;
+    }
 
     public function BindParam($field)
     {

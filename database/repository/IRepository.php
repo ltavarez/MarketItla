@@ -10,11 +10,11 @@ interface IRepository{
 
     public function Update($entity);
 
-    public function Delete($id, $field = null);
+    public function Delete($id,$entity, $field = null);
 
-    public function ChangeStatus($id,$fieldStatus,$value,$field = null);
+    public function ChangeStatus($id, $value, $fieldStatus = null,$field = null, $entity = null);
 
     public function BindParam($field);
-}
 
-?>
+    public function MakeSafeEntity($entity);
+}

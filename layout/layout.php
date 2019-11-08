@@ -79,11 +79,7 @@ EOF;
 function printFooterAdministrator(){
     $footer = <<< EOF
 
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
-    <div class="row">
-     
-    </div>
-   </footer>
+  
    
    <script type="text/javascript" src="{$this->directory}assets\js\plugin\jquery\jquery.js"></script>
    <script type="text/javascript" src="{$this->directory}assets\js\bootstrap.bundle.js"></script>
@@ -105,7 +101,9 @@ EOF;
 }
 
 
-function printHeaderAdministrator(){
+function printHeaderAdministrator($page){
+
+    $directory = $page == true ? "../administrator/" : "";
 
     $header = <<<EOF
     <!DOCTYPE html>
@@ -120,7 +118,7 @@ function printHeaderAdministrator(){
 
 <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="dashboard.php">Market Itla</a>
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{$directory}dashboard.php">Market Itla</a>
        
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
@@ -150,7 +148,7 @@ function printHeaderAdministrator(){
                                     <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
                                     <polyline points="13 2 13 9 20 9"></polyline>
                                 </svg>
-                                Front Market
+                              Tienda
                             </a>
                         </li>
                         <li class="nav-item">
@@ -164,7 +162,7 @@ function printHeaderAdministrator(){
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="../user/list.php">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
