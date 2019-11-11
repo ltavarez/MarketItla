@@ -184,7 +184,7 @@ class RepositoryBase implements IRepository
             $params[0] = $params[0] . $typeParam;
             array_push($params, $field);
         } else {
-            $sq = "UPDATE $table SET $setString WHERE id = ?";
+            $sq = "UPDATE $table SET $setString WHERE Id = ?";
             $typeParam = $this->BindParam($entity->Id);
             $params[0] = $params[0] . $typeParam;
             array_push($params, $entity->Id);

@@ -11,10 +11,15 @@ include '../database/repository/IRepository.php';
 include '../database/repository/RepositoryBase.php';
 include '../database/repository/RepositoryUser.php';
 include '../user/UserService.php';
+include '../PhpMailer/Exception.php';
+include '../PhpMailer/PHPMailer.php';
+include '../PhpMailer/SMTP.php';
+include '../helpers/emailHandler.php';
 
 $layout = new Layout(true);
 $utilities = new Utilities();
 $service = new UserService("../database");
+$emailHandler = new EmailHandler();
 
 if (isset($_POST['UserName']) && isset($_POST['Password']) && isset($_POST['FirstName']) && isset($_POST['LastName']) && isset($_POST['Email'])) {
 
